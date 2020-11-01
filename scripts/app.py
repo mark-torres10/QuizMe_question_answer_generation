@@ -103,7 +103,7 @@ def get_true_false_questions(text, num_questions):
 		false_sentences = []
     
     	# loop through list of partial sentences
-		for sentence in partial_sentence_list:
+		for sentence in partial_sentences_list:
 
 			# create our false sentences
 			false_sents = generate_sentences(partial_sentence, key_sentence, num_fake_sentences)
@@ -258,7 +258,7 @@ def main():
 	# text/title
 	st.title('"QuizMe": Automated Question and Answer Generator for Any Text, Using Machine Learning')
 	st.subheader("By: Mark Torres")
-	st.header("This app lets you automatically generate True/False and Multiple Choice questions for any passage or piece of text.")
+	st.header("This web app lets you automatically generate True/False and Multiple Choice questions for any passage or piece of text.")
 
 	# create text box to enter data
 	st.subheader("Please enter a paragraph or more about any topic (from horses to Australia to macaroni and cheese) and our app will create test questions about that topic!")
@@ -276,7 +276,7 @@ def main():
 
 	# ask if they want True/False, MC, or both
 	type_of_question = st.radio("What types of questions do you want? Currently we support True/False and Multiple Choice questions", 
-								options = ["Multiple Choice", "True/False", "Both"], index = 0)
+								options = ["Multiple Choice", "True/False", "Both"])
 
 	# submit
 	if st.button("Create questions!"):
@@ -292,11 +292,24 @@ def main():
 		for i in range(5):
 			time.sleep(2)
 			progress_bar.progress((i * 25))
+
 		# get our questions
 		if type_of_question == "Multiple Choice":
 			question_answer_list = get_multiple_choice_questions(text, num_questions)
-		else:
+		elif type_of_question == "True/False":
 			question_answer_list = get_true_false_questions(text, num_questions)
+		elif type_of_question == "Both":
+			mc_questions = get_multiple_choice_questions(text, num_questions)
+			true_false_questions = get_true_false_questions(text, num_questions)
+			# combine both lists
+			question_answer_list = mc_question + true_false_questions
+			# shuffle
+			random.shuffle(question_answer_list)
+			# get only desired number of questions
+			question_answer_list[:num_questions]
+		else:
+			st.error("Please select a type of question (see options above)")
+
 		# add success at end
 		st.success("Questions were successfully created! Check it out below!")
 		# print original text
