@@ -40,9 +40,15 @@ def clean_text(text):
     return text
 
 
-def get_sentences(text, ratio = 0.3):
+def get_sentences(text, ratio = 1.0):
+
     """
         Get our sentences to use. 
+
+        Args:
+        	• text: text to summarize
+        	• ratio: proportion of sentences to use 
+        	(more sentences = more possible questions, but longer evaluation time)
         
     """
     

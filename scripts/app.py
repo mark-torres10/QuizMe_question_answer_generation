@@ -83,20 +83,15 @@ def get_true_false_questions(text, num_questions):
 
 	# clean + split text
 	text = clean_text(text)
-	print(f"Our cleaned text: {text}")
 	cleaned_text = get_sentences(text)
-	print(f"Our text, after running 'get_sentences': {cleaned_text}")
 	cleaned_text = [clean_text(x) for x in cleaned_text]
-	print(f"Our text, after running 'get_sentences' and doing list comprehension: {cleaned_text}")
 
 	# use parser to split sentences, remove last verb phrase or last noun phrase
 	sentence_completion_dict = get_sentence_completions(cleaned_text)
 
-	print(f"Our sentence completion dict: {sentence_completion_dict}")
-
 	# get false sentences
 	probability_true = 0.5 # probability that we'll add a True statement, rather than the False statement
-	num_fake_sentences = 3 # number of fake sentences that we'd like to create for each real partial sentence
+	num_fake_sentences = 3 # number of (maximum) fake sentences that we'd like to create for each real partial sentence
 	answer_choices = " (a) True  (b) False" # define our answer choices
 	question_answers_list = [] # list to hold our questions and answers
 
@@ -108,7 +103,7 @@ def get_true_false_questions(text, num_questions):
 		# start creating false sentences
 		false_sentences = []
 
-		print(f"The number of false sentences that we have for the keyword of ({key_sentence}) is: {len(false_sentences)}")
+		print(f"The number of false sentences that we have for the keyword of ({key_sentence}) is: {len(partial_sentences_list)}")
     
     	# loop through list of partial sentences
 		for sentence in partial_sentences_list:
@@ -274,7 +269,7 @@ def main():
 
 	# create text box to enter data
 	st.subheader("Please enter a paragraph or more about any topic (from horses to Australia to macaroni and cheese) and our app will create test questions about that topic!")
-	text = st.text_area("Enter your text:")
+	text = st.text_area("Enter your text:", height = 250)
 
 	# ask how many questions you want
 	st.subheader("Please fill out some additional options below:")
