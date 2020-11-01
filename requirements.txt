@@ -5,6 +5,8 @@ astor==0.8.1
 async-generator==1.10
 backcall==0.2.0
 base58==2.0.1
+Cython==0.29.21
+numpy==1.19.3
 benepar==0.1.2
 bert-extractive-summarizer==0.5.1
 blinker==1.4
