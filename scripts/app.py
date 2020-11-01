@@ -21,9 +21,20 @@ from pywsd.lesk import adapted_lesk
 from pywsd.lesk import simple_lesk
 from pywsd.lesk import cosine_lesk
 from nltk.corpus import wordnet as wn
-
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
 from sentence_transformers import SentenceTransformer
+from string import punctuation
+import torch
+import tensorflow as tf
+import transformers
+import summa
+from summa.summarizer import summarize
+import benepar # requires Tensorflow, although we'll use torch otherwise
+import nltk
+from nltk import tokenize
+import re
+import spacy
+import scipy
 
 # import from .py files
 import true_false_questions
@@ -298,16 +309,17 @@ def main():
 			st.markdown(question_with_num)
 
 	# TODO: add functionality to choose True/False, MC, or both
-	st.subheader("The following are some improvements to the app that are underway:")
-	st.subheader("Add true question generation, rather than fill-in-the-blank (using current neural question generation research)")
-	
+	st.subheader("The following are some improvements to the app that are underway (NEED TO ADD THESE TO GITHUB):")
+	st.subheader("1. Add true question generation, rather than fill-in-the-blank (using current neural question generation research)")
+	st.subheader("2. Fix formatting of output (from markdown to something cleaner, but using st.text() only lets you print one line)")
+	st.subheader("3. Allow file upload (e.g., can upload text or PDF or word doc?)")
 	# TODO: allow them to choose how many choices they want per MC question (let's make it 3, 4, or 5)
 
 	# show results (and highlight correct answer)
 
 	
 	# click below to learn more
-	st.subheader("If you have any feedback or comments, please feel free to either make a pull request at [https]://github.com/mark-torres10/QuizMe_question_answer_generation or send an email to mark.torres[at]aya.yale.edu")
+	st.subheader("If you have any feedback or comments, please feel free to either create an issue or make a pull request at [https]://github.com/mark-torres10/QuizMe_question_answer_generation or send an email to mark.torres[at]aya.yale.edu")
 
 	# if you have any comments for improvements, submit a pull request!
 
