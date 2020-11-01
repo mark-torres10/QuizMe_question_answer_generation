@@ -92,31 +92,31 @@ def get_true_false_questions(text, num_questions):
 		false_sentences = []
     
     	# loop through list of partial sentences
-    	for sentence in partial_sentence_list:
+		for sentence in partial_sentence_list:
 
-    		# create our false sentences
+			# create our false sentences
 			false_sents = generate_sentences(partial_sentence, key_sentence, num_fake_sentences)
 			false_sentences.extend(false_sents)
 
 		for idx, false_sent in enumerate(false_sentences):
         	
-        	# for each fake option, we now need to decide if we'll use a fake question or a real question
+			# for each fake option, we now need to decide if we'll use a fake question or a real question
 
-        	# return the actual question
-        	if np.random.uniform() <= probability_true:
-        		question = f"(ANSWER: True) {key_sentence} : " + answer_choices + "\n" # e.g., "(Answer: True) : 2 + 2 = 4"
-        	# return the false sentence
-        	else:
-        		question = f"(ANSWER: False) {false_sent} : " + answer_choices + "\n" # e.g., "(Answer: False) : 2 + 2 = 5"
+			# return the actual question
+			if np.random.uniform() <= probability_true:
+				question = f"(ANSWER: True) {key_sentence} : " + answer_choices + "\n" # e.g., "(Answer: True) : 2 + 2 = 4"
+			# return the false sentence
+			else:
+				question = f"(ANSWER: False) {false_sent} : " + answer_choices + "\n" # e.g., "(Answer: False) : 2 + 2 = 5"
 
         	# add question to question list
-        	question_answers_list.append(question)
+			question_answers_list.append(question)
 
-    # shuffle our questions
-    random.shuffle(question_answers_list)
+	# shuffle our questions
+	random.shuffle(question_answers_list)
 
-    # get the first "num_questions" values
-    return question_answers_list[:num_questions]
+	# get the first "num_questions" values
+	return question_answers_list[:num_questions]
 
 
 ########################################################
@@ -299,7 +299,8 @@ def main():
 
 	# TODO: add functionality to choose True/False, MC, or both
 	st.subheader("The following are some improvements to the app that are underway:")
-	st.subheader("Add true question generation ")
+	st.subheader("Add true question generation, rather than fill-in-the-blank (using current neural question generation research)")
+	
 	# TODO: allow them to choose how many choices they want per MC question (let's make it 3, 4, or 5)
 
 	# show results (and highlight correct answer)
