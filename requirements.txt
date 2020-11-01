@@ -46,7 +46,7 @@ Keras-Preprocessing==1.1.2
 langcodes==2.1.0
 marisa-trie==0.7.5
 Markdown==3.3.3
-MarkupSafe==1.1.1
+MarkupSafe==0.8.4
 mistune==1.0.6
 mkl-fft==1.2.0
 mkl-random==1.1.1
