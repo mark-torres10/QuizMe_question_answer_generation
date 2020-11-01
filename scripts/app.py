@@ -52,6 +52,7 @@ from multiple_choice_questions import get_distractors_wordnet, get_wordsense, ge
 
 ########################################################
 
+@st.cache
 def get_true_false_questions(text, num_questions):
 
 	"""
@@ -82,11 +83,16 @@ def get_true_false_questions(text, num_questions):
 
 	# clean + split text
 	text = clean_text(text)
+	print(f"Our cleaned text: {text}")
 	cleaned_text = get_sentences(text)
+	print(f"Our text, after running 'get_sentences': {cleaned_text}")
 	cleaned_text = [clean_text(x) for x in cleaned_text]
+	print(f"Our text, after running 'get_sentences' and doing list comprehension: {cleaned_text}")
 
 	# use parser to split sentences, remove last verb phrase or last noun phrase
 	sentence_completion_dict = get_sentence_completions(cleaned_text)
+
+	print(f"Our sentence completion dict: {sentence_completion_dict}")
 
 	# get false sentences
 	probability_true = 0.5 # probability that we'll add a True statement, rather than the False statement
@@ -101,13 +107,17 @@ def get_true_false_questions(text, num_questions):
 
 		# start creating false sentences
 		false_sentences = []
+
+		print(f"The number of false sentences that we have for the keyword of ({key_sentence}) is: {len(false_sentences)}")
     
     	# loop through list of partial sentences
 		for sentence in partial_sentences_list:
 
 			# create our false sentences
-			false_sents = generate_sentences(partial_sentence, key_sentence, num_fake_sentences)
+			false_sents = generate_sentences(sentence, key_sentence, num_fake_sentences)
 			false_sentences.extend(false_sents)
+
+		print(f"After the for loop through the partial sentences, we have {len(false_sentences)} false sentences")
 
 		for idx, false_sent in enumerate(false_sentences):
         	
@@ -115,13 +125,15 @@ def get_true_false_questions(text, num_questions):
 
 			# return the actual question
 			if np.random.uniform() <= probability_true:
-				question = f"(ANSWER: True) {key_sentence} : " + answer_choices + "\n" # e.g., "(Answer: True) : 2 + 2 = 4"
+				question = f" (ANSWER: True) {key_sentence} : " + answer_choices + "\n" # e.g., "(Answer: True) : 2 + 2 = 4"
 			# return the false sentence
 			else:
-				question = f"(ANSWER: False) {false_sent} : " + answer_choices + "\n" # e.g., "(Answer: False) : 2 + 2 = 5"
+				question = f" (ANSWER: False) {false_sent} : " + answer_choices + "\n" # e.g., "(Answer: False) : 2 + 2 = 5"
 
         	# add question to question list
 			question_answers_list.append(question)
+
+			print(f"We have {len(question_answers_list)} questions in our list")
 
 	# shuffle our questions
 	random.shuffle(question_answers_list)
@@ -222,7 +234,7 @@ def get_multiple_choice_questions(text, num_questions, num_options = 4):
 		output = pattern.sub("___________", sentence)
 
 		# get our question - e.g., "(Answer: Mt. Everest) : The highest mountain in the world is ________ and it is in Asia."
-		question = f" (Answer: {each.capitalize()}) : {output}\n" 
+		question = f" (ANSWER: {each.capitalize()}) : {output}\n" 
 
 		# populate our choices
 		choices = [each.capitalize()] + key_distractor_list[each]
@@ -278,6 +290,10 @@ def main():
 	type_of_question = st.radio("What types of questions do you want? Currently we support True/False and Multiple Choice questions", 
 								options = ["Multiple Choice", "True/False", "Both"])
 
+	# if they choose either Multiple Choice or Both, ask them how many options they'd want
+	if type_of_question == "Multiple Choice" or type_of_question == "Both":
+		num_options_MC = st.radio("How many multiple choice options would you want to see?", options = [3, 4, 5], index=1)
+
 	# submit
 	if st.button("Create questions!"):
 		# add first success message
@@ -295,11 +311,11 @@ def main():
 
 		# get our questions
 		if type_of_question == "Multiple Choice":
-			question_answer_list = get_multiple_choice_questions(text, num_questions)
+			question_answer_list = get_multiple_choice_questions(text, num_questions, num_options_MC)
 		elif type_of_question == "True/False":
 			question_answer_list = get_true_false_questions(text, num_questions)
 		elif type_of_question == "Both":
-			mc_questions = get_multiple_choice_questions(text, num_questions)
+			mc_questions = get_multiple_choice_questions(text, num_questions, num_options_MC)
 			true_false_questions = get_true_false_questions(text, num_questions)
 			# combine both lists
 			question_answer_list = mc_question + true_false_questions
@@ -320,18 +336,8 @@ def main():
 		for question_num, question in enumerate(question_answer_list):
 			question_with_num = f"{question_num + 1})" + question
 			st.markdown(question_with_num)
-
-	# TODO: add functionality to choose True/False, MC, or both
-	st.subheader("The following are some improvements to the app that are underway (NEED TO ADD THESE TO GITHUB):")
-	st.subheader("1. Add true question generation, rather than fill-in-the-blank (using current neural question generation research)")
-	st.subheader("2. Fix formatting of output (from markdown to something cleaner, but using st.text() only lets you print one line)")
-	st.subheader("3. Allow file upload (e.g., can upload text or PDF or word doc?)")
-	# TODO: allow them to choose how many choices they want per MC question (let's make it 3, 4, or 5)
-
-	# show results (and highlight correct answer)
-
 	
-	# click below to learn more
+	# see below to learn more (add notes)
 	st.subheader("If you have any feedback or comments, please feel free to either create an issue or make a pull request at [https]://github.com/mark-torres10/QuizMe_question_answer_generation or send an email to mark.torres[at]aya.yale.edu")
 
 	# if you have any comments for improvements, submit a pull request!
