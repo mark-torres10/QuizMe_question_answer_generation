@@ -35,7 +35,6 @@ google-pasta==0.2.0
 grpcio==1.33.2
 h5py==3.0.0
 idna==2.10
-importlib-metadata @ file:///tmp/build/80754af9/importlib-metadata_1602276842396/work
 ipykernel @ file:///opt/concourse/worker/volumes/live/43eaf185-e9cd-4e78-5afa-c19accf1339d/volume/ipykernel_1596206683810/work/dist/ipykernel-5.3.4-py3-none-any.whl
 ipython @ file:///opt/concourse/worker/volumes/live/8c453bb6-500b-4747-778c-a236ae4a574d/volume/ipython_1593447395779/work
 ipython-genutils==0.2.0
