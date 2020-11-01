@@ -35,20 +35,12 @@ google-pasta==0.2.0
 grpcio==1.33.2
 h5py==3.0.0
 idna==2.10
-ipykernel @ file:///opt/concourse/worker/volumes/live/43eaf185-e9cd-4e78-5afa-c19accf1339d/volume/ipykernel_1596206683810/work/dist/ipykernel-5.3.4-py3-none-any.whl
-ipython @ file:///opt/concourse/worker/volumes/live/8c453bb6-500b-4747-778c-a236ae4a574d/volume/ipython_1593447395779/work
 ipython-genutils==0.2.0
-ipywidgets @ file:///tmp/build/80754af9/ipywidgets_1601490159889/work
-jedi @ file:///opt/concourse/worker/volumes/live/565dbe5a-443f-465a-7ff2-b61f4a5f081d/volume/jedi_1598371617578/work
 Jinja2==2.11.2
 jmespath==0.10.0
 joblib==0.17.0
-jsonschema @ file:///tmp/build/80754af9/jsonschema_1602607155483/work
 jupyter==1.0.0
-jupyter-client @ file:///tmp/build/80754af9/jupyter_client_1601311786391/work
-jupyter-console @ file:///tmp/build/80754af9/jupyter_console_1598884538475/work
 jupyter-core==4.6.3
-jupyterlab-pygments @ file:///tmp/build/80754af9/jupyterlab_pygments_1601490720602/work
 Keras-Applications==1.0.8
 Keras-Preprocessing==1.1.2
 langcodes==2.1.0
@@ -60,10 +52,6 @@ mkl-fft==1.2.0
 mkl-random==1.1.1
 mkl-service==2.3.0
 murmurhash==1.0.2
-nbclient @ file:///tmp/build/80754af9/nbclient_1602783176460/work
-nbconvert @ file:///opt/concourse/worker/volumes/live/83354520-8b79-4a5c-771c-53c9f422edfc/volume/nbconvert_1601914843271/work
-nbformat @ file:///tmp/build/80754af9/nbformat_1602783287752/work
-nest-asyncio @ file:///tmp/build/80754af9/nest-asyncio_1601499549014/work
 networkx==2.5
 nltk==3.4.5
 notebook==6.0.3
@@ -80,21 +68,16 @@ pke @ git+https://github.com/boudinfl/pke.git@6abbcd5d29d14f5151b79a20715ae06dbd
 plac==0.9.6
 preshed==2.0.1
 prometheus-client==0.8.0
-prompt-toolkit @ file:///tmp/build/80754af9/prompt-toolkit_1602688806899/work
 protobuf==3.13.0
 ptyprocess==0.6.0
 pyarrow==2.0.0
 pycosat==0.6.3
-pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
 pydeck==0.5.0
-Pygments @ file:///tmp/build/80754af9/pygments_1604103097372/work
 pyparsing==2.4.7
-pyrsistent @ file:///opt/concourse/worker/volumes/live/d7ed6755-1956-4a16-5499-c03638db758d/volume/pyrsistent_1600141722278/work
 python-dateutil==2.8.1
 pytz==2020.1
 pywsd==1.2.4
 pyzmq==19.0.2
-qtconsole @ file:///tmp/build/80754af9/qtconsole_1600870028330/work
 QtPy==1.9.0
 regex==2020.10.28
 requests==2.24.0
@@ -138,11 +121,9 @@ urllib3==1.25.11
 validators==0.18.1
 wasabi==0.8.0
 watchdog==0.10.3
-wcwidth @ file:///tmp/build/80754af9/wcwidth_1593447189090/work
 webencodings==0.5.1
 Werkzeug==1.0.1
 widgetsnbextension==3.5.1
 wn==0.0.23
 wrapt==1.12.1
-zipp @ file:///tmp/build/80754af9/zipp_1604001098328/work
 benepar==0.1.2
