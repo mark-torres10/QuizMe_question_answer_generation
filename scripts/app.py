@@ -2,6 +2,7 @@ import streamlit as st
 import time
 import os
 import nltk
+import numpy as np
 nltk.download('stopwords')
 nltk.download('popular')
 from summarizer import Summarizer # make text summaries
@@ -21,8 +22,13 @@ from pywsd.lesk import simple_lesk
 from pywsd.lesk import cosine_lesk
 from nltk.corpus import wordnet as wn
 
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
+from sentence_transformers import SentenceTransformer
+
 # import from .py files
-#import true_false_questions
+import true_false_questions
+from true_false_questions import clean_text, get_sentences, get_flattened, get_last_portion, get_rightmost_VP_or_NP
+from true_false_questions import get_sentence_completions, sort_by_similarity, generate_sentences
 import multiple_choice_questions
 from multiple_choice_questions import get_nouns_multipartite, tokenize_sentence, get_sentences_for_keyword
 from multiple_choice_questions import get_distractors_wordnet, get_wordsense, get_distractors_conceptnet, get_distractors
@@ -32,8 +38,85 @@ from multiple_choice_questions import get_distractors_wordnet, get_wordsense, ge
 
 ##### Functions for creating True/False questions ######
 
+
 ########################################################
 
+def get_true_false_questions(text, num_questions):
+
+	"""
+
+		Get true/false questions for the specified text
+		Args:
+			• text: text for which to create questions
+			• num_questions: number of questions to create
+
+		Output:
+			• question_answers_list: list of questions, where
+			each entry is the question + answers for that question
+
+	"""
+
+	# load GPT2 (for generating false sequences) and BERT (for finding sentence similarity of our real sentence against 
+	# our fake sentence
+	tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+	model = GPT2LMHeadModel.from_pretrained("gpt2") # we'll use GPT2 to generate sentences
+	# load BERT model
+	model_BERT = SentenceTransformer('bert-base-nli-mean-tokens') # we'll use BERT to filter sentences based on similarity
+
+	# load necessary NLP tools + parser
+	nltk.download("punkt")
+	nlp = spacy.load("en")
+	benepar.download("benepar_en2")
+	benepar_parser = benepar.Parser("benepar_en2")
+
+	# clean + split text
+	text = clean_text(text)
+	cleaned_text = get_sentences(text)
+	cleaned_text = [clean_text(x) for x in cleaned_text]
+
+	# use parser to split sentences, remove last verb phrase or last noun phrase
+	sentence_completion_dict = get_sentence_completions(cleaned_text)
+
+	# get false sentences
+	probability_true = 0.5 # probability that we'll add a True statement, rather than the False statement
+	num_fake_sentences = 3 # number of fake sentences that we'd like to create for each real partial sentence
+	answer_choices = " (a) True  (b) False" # define our answer choices
+	question_answers_list = [] # list to hold our questions and answers
+
+	for key_sentence in sentence_completion_dict:
+
+		# get our partial sentence
+		partial_sentences_list = sentence_completion_dict[key_sentence]
+
+		# start creating false sentences
+		false_sentences = []
+    
+    	# loop through list of partial sentences
+    	for sentence in partial_sentence_list:
+
+    		# create our false sentences
+			false_sents = generate_sentences(partial_sentence, key_sentence, num_fake_sentences)
+			false_sentences.extend(false_sents)
+
+		for idx, false_sent in enumerate(false_sentences):
+        	
+        	# for each fake option, we now need to decide if we'll use a fake question or a real question
+
+        	# return the actual question
+        	if np.random.uniform() <= probability_true:
+        		question = f"(ANSWER: True) {key_sentence} : " + answer_choices + "\n" # e.g., "(Answer: True) : 2 + 2 = 4"
+        	# return the false sentence
+        	else:
+        		question = f"(ANSWER: False) {false_sent} : " + answer_choices + "\n" # e.g., "(Answer: False) : 2 + 2 = 5"
+
+        	# add question to question list
+        	question_answers_list.append(question)
+
+    # shuffle our questions
+    random.shuffle(question_answers_list)
+
+    # get the first "num_questions" values
+    return question_answers_list[:num_questions]
 
 
 ########################################################
@@ -84,6 +167,10 @@ def get_multiple_choice_questions(text, num_questions, num_options = 4):
 			• num_questions: number of questions to create
 			• num_options: max # of options per MC question
 
+		Output:
+			• question_answers_list: list of questions, where
+			each entry is the question + answers for that question
+
 	"""
 
 	# create BERT model
@@ -123,8 +210,8 @@ def get_multiple_choice_questions(text, num_questions, num_options = 4):
 		# add blank for our answer
 		output = pattern.sub("___________", sentence)
 
-		# get our question
-		question = f" {output}\n" # e.g., "The highest mountain in the world is ________ and it is in Asia."
+		# get our question - e.g., "(Answer: Mt. Everest) : The highest mountain in the world is ________ and it is in Asia."
+		question = f" (Answer: {each.capitalize()}) : {output}\n" 
 
 		# populate our choices
 		choices = [each.capitalize()] + key_distractor_list[each]
@@ -195,7 +282,10 @@ def main():
 			time.sleep(2)
 			progress_bar.progress((i * 25))
 		# get our questions
-		multiple_choice_question_answer_list = get_multiple_choice_questions(text, num_questions)
+		if type_of_question == "Multiple Choice":
+			question_answer_list = get_multiple_choice_questions(text, num_questions)
+		else:
+			question_answer_list = get_true_false_questions(text, num_questions)
 		# add success at end
 		st.success("Questions were successfully created! Check it out below!")
 		# print original text
@@ -203,19 +293,20 @@ def main():
 		st.markdown(text)
 		st.subheader("Here are the questions that our AI program came up with:")
 		# print questions
-		for question_num, question in enumerate(multiple_choice_question_answer_list):
+		for question_num, question in enumerate(question_answer_list):
 			question_with_num = f"{question_num + 1})" + question
 			st.markdown(question_with_num)
 
 	# TODO: add functionality to choose True/False, MC, or both
-
+	st.subheader("The following are some improvements to the app that are underway:")
+	st.subheader("Add true question generation ")
 	# TODO: allow them to choose how many choices they want per MC question (let's make it 3, 4, or 5)
 
 	# show results (and highlight correct answer)
 
 	
 	# click below to learn more
-	st.subheader("If you have any feedback or comments, please feel free to either make a pull request at [INSERT GITHUB LINK] or send an email to mark.torres[at]aya.yale.edu")
+	st.subheader("If you have any feedback or comments, please feel free to either make a pull request at [https]://github.com/mark-torres10/QuizMe_question_answer_generation or send an email to mark.torres[at]aya.yale.edu")
 
 	# if you have any comments for improvements, submit a pull request!
 
