@@ -3,12 +3,10 @@ altair==4.1.0
 appnope==0.1.0
 astor==0.8.1
 async-generator==1.10
-attrs @ file:///tmp/build/80754af9/attrs_1600298409949/work
 backcall==0.2.0
 base58==2.0.1
 benepar==0.1.2
 bert-extractive-summarizer==0.5.1
-bleach @ file:///tmp/build/80754af9/bleach_1600439572647/work
 blinker==1.4
 blis==0.2.4
 boto3==1.16.9
@@ -47,7 +45,7 @@ jedi @ file:///opt/concourse/worker/volumes/live/565dbe5a-443f-465a-7ff2-b61f4a5
 Jinja2==2.11.2
 jmespath==0.10.0
 joblib==0.17.0
-jsonschema==2.6.0
+jsonschema @ file:///tmp/build/80754af9/jsonschema_1602607155483/work
 jupyter==1.0.0
 jupyter-client @ file:///tmp/build/80754af9/jupyter_client_1601311786391/work
 jupyter-console @ file:///tmp/build/80754af9/jupyter_console_1598884538475/work
