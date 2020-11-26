@@ -130,6 +130,9 @@ def get_true_false_questions(text, num_questions):
 
 			print(f"We have {len(question_answers_list)} questions in our list")
 
+			if len(question_answers_list) >= num_questions:
+				break
+
 	# shuffle our questions
 	random.shuffle(question_answers_list)
 
@@ -255,6 +258,9 @@ def get_multiple_choice_questions(text, num_questions, num_options = 4):
 		# update question counter
 		question_num = question_num + 1
 
+		if question_num > num_questions:
+			break
+
 	# now, take "num_questions" amount of questions, return that many questions
 	return question_answers_list[:num_questions]
 
@@ -267,42 +273,37 @@ def main():
 	st.subheader("By: Mark Torres")
 	st.header("This web app lets you automatically generate True/False and Multiple Choice questions for any passage or piece of text.")
 
-	# create text box to enter data
-	st.subheader("Please enter a paragraph or more about any topic (from horses to Australia to macaroni and cheese) and our app will create test questions about that topic!")
-	text = st.text_area("Enter your text:", height = 250)
+	col1, col2 = st.beta_columns([3, 1])
 
-	# ask how many questions you want
-	st.subheader("Please fill out some additional options below:")
+	with col1:
+		# create text box to enter data
+		st.subheader("Please enter a paragraph or more about any topic (from horses to Australia to macaroni and cheese) and our app will create test questions about that topic!")
+		text = st.text_area("Enter your text:", height = 250)
 
-	num_questions = st.number_input("How many questions would you like to create? Typically, somewhere around 10 questions gives the best results",
-									 min_value = 0, 
-									 max_value = 50, 
-									 value = 10, 
-									 step = 1, 
-									 format = "%i")
+	with col2:
+		# ask how many questions you want
+		st.subheader("Please fill out some additional options below:")
 
-	# ask if they want True/False, MC, or both
-	type_of_question = st.radio("What types of questions do you want? Currently we support True/False and Multiple Choice questions", 
-								options = ["Multiple Choice", "True/False", "Both"])
+		num_questions = st.number_input("How many questions would you like to create? Typically, somewhere around 10 questions gives the best results",
+										min_value = 0, 
+										max_value = 50, 
+										value = 10, 
+										step = 1, 
+										format = '%i')
 
-	# if they choose either Multiple Choice or Both, ask them how many options they'd want
-	if type_of_question == "Multiple Choice" or type_of_question == "Both":
-		num_options_MC = st.radio("How many multiple choice options would you want to see?", options = [3, 4, 5], index=1)
+		# ask if they want True/False, MC, or both
+		type_of_question = st.radio("What types of questions do you want? Currently we support True/False and Multiple Choice questions", 
+									options = ["Multiple Choice", "True/False", "Both"])
+
+		# if they choose either Multiple Choice or Both, ask them how many options they'd want
+		if type_of_question == "Multiple Choice" or type_of_question == "Both":
+			num_options_MC = st.radio("How many multiple choice options would you want to see?", options = [3, 4, 5], index=1)
 
 	# submit
 	if st.button("Create questions!"):
 		# add first success message
 		st.success("Successfully submitted!")
-		# add spinning wheel
-		with st.spinner("Sending data to server"):
-			time.sleep(5)
-		st.success("Data sent to server. Questions are being created as we speak.")
-		# add progress bar (will be important while questions are being created)
-		progress_bar = st.progress(0)
 		# add loading capability (TODO: get this to time the question generation process - use as decorator?)
-		for i in range(5):
-			time.sleep(2)
-			progress_bar.progress((i * 25))
 
 		# get our questions
 		if type_of_question == "Multiple Choice":

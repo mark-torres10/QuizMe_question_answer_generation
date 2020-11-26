@@ -266,7 +266,10 @@ def get_distractors(keyword_sentence_mapping):
     for keyword in keyword_sentence_mapping:
 
         # check to see if we're going to have synonyms to use
-        wordsense = get_wordsense(keyword_sentence_mapping[keyword][0], keyword)
+        try:
+            wordsense = get_wordsense(keyword_sentence_mapping[keyword][0], keyword)
+        except: 
+            wordsense = None
 
         # if we have synonyms, use WordNet to get hypernyms/hyponyms
         if wordsense:
