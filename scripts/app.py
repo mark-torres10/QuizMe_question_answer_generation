@@ -313,7 +313,7 @@ def main():
 			mc_questions = get_multiple_choice_questions(text, num_questions, num_options_MC)
 			true_false_questions = get_true_false_questions(text, num_questions)
 			# combine both lists
-			question_answer_list = mc_question + true_false_questions
+			question_answer_list = mc_questions + true_false_questions
 			# shuffle
 			random.shuffle(question_answer_list)
 			# get only desired number of questions
@@ -332,10 +332,6 @@ def main():
 			question_with_num = f"{question_num + 1})" + question
 			st.markdown(question_with_num)
 	
-	# see below to learn more (add notes)
-	st.subheader("If you have any feedback or comments, please feel free to either create an issue or make a pull request at [https]://github.com/mark-torres10/QuizMe_question_answer_generation or send an email to mark.torres[at]aya.yale.edu")
-
-	# if you have any comments for improvements, submit a pull request!
 
 if __name__ == "__main__":
 	main()
